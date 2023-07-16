@@ -2,9 +2,11 @@ import axios from 'axios';
 
 let catApi = null;
 
-export function init(api_key) {
+export function init() {
+  const apiKey =
+    'live_MpaUbwcphieB86tM8zHJitWXNSTFDzh3N9G44xZfkNvZHY6vwmi6a7oo7S5nIr2t';
   catApi = require('axios').default;
-  catApi.defaults.headers.common['x-api-key'] = api_key;
+  catApi.defaults.headers.common['x-api-key'] = apiKey;
 }
 
 export function fetchBreeds() {

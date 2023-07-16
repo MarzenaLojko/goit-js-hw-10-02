@@ -57,7 +57,7 @@ function handleChange(event) {
     });
 }
 
-catApi.init(apiKey);
+catApi.init();
 catApi
   .fetchBreeds()
   .then(function (response) {
