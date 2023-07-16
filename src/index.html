@@ -2,32 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      http-equiv="X-UA-Compatible"
-      content="IE=edge"
-    />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Homework 10</title>
-  </head>
-  <body>
-    <input
-      type="text"
-      id="search-box"
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/slim-select/dist/slimselect.min.css"
     />
-    <ul class="country-list"></ul>
-    <div class="country-info"></div>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
 
-    <script
-      src="index.js"
-      type="module"
-    ></script>
+  <body>
+    <h3>Choose the breed:</h3>
+    <select class="breed-select"></select>
+    <div class="loaderBox">
+      <p>Loading data, please wait...</p>
+      <span class="loader"></span>
+    </div>
+    <p class="error">Oops! Something went wrong! Try reloading the page!</p>
+    <div class="cat-info"></div>
+
+    <script src="index.js" type="module"></script>
   </body>
 </html>
-<!-- <div>country[0].flags</div>
-<div>country[0].name.official</div>
-<div>Capital:country[0].capital[0]</div>
-<div>Population:country[0].population</div>
-<div>Languages:country[0].languages</div> -->

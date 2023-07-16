@@ -1,46 +1,57 @@
-* {
-  box-sizing: border-box;
-}
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #fafafa;
-  color: #212121;
-  line-height: 1.5;
+  background-color: rgba(108, 108, 105, 0.349);
+  color: rgb(66, 66, 64);
+  text-align: left;
 }
-
-#search-box {
-  font: inherit;
-  padding: 8px;
-  max-width: 320px;
-  margin-bottom: 16px;
+h1,
+h3 {
+  color: rgb(8, 189, 221);
 }
-
-.country-list_flag {
+.cat-info {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+  flex-direction: column;
+  align-items: center; 
+  margin: 20px;
 }
-
-.country-list_title {
-  font-size: 20px;
+.hidden {
+  display: none;
 }
-
-.country-info_flag {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 30px;
+.breedsImage {
+  display: block;
+  width: 500px;
+  height: auto;
+  padding: 15px;  
 }
-
-.country-info_title {
-  font-size: 40px;
-  font-weight: bold;
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-block;
+  border-top: 4px solid #FFF;
+  border-right: 4px solid transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
-
-.country-info_description {
-  font-size: 20px;
-  margin-bottom: 20px;
+.loader::after {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border-left: 4px solid #FF3D00;
+  border-bottom: 4px solid transparent;
+  animation: rotation 0.5s linear infinite reverse;
 }
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 

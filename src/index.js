@@ -1,56 +1,79 @@
-import './css/styles.css';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { fetchCountries } from './fetchCountries';
-var debounce = require('lodash.debounce');
+import * as catApi from './cat-api';
+import SlimSelect from 'slim-select';
+import '../node_modules/slim-select/dist/slimselect.css';
+import Notiflix from 'notiflix';
 
-const DEBOUNCE_DELAY = 300;
-const countryListEl = document.querySelector('ul.country-list');
-countryListEl.previousElementSibling.addEventListener(
-  'input',
-  debounce(onInput, DEBOUNCE_DELAY)
-);
+const breedSelect = document.querySelector('.breed-select');
+const catInfo = document.querySelector('.cat-info');
+const loader = document.querySelector('.loaderBox');
+const error = document.querySelector('.error');
 
-function onInput() {
-  const nameCountry = countryListEl.previousElementSibling.value.trim();
-  if (nameCountry === '' || nameCountry === ' ') {
-    countryListEl.nextElementSibling.innerHTML = '';
-    countryListEl.innerHTML = '';
-    return;
-  } else {
-    fetchCountries(nameCountry)
-      .then((country) => {
-        if (country.length > 10) {
-          Notify.info(
-            'Too many matches found. Please enter a more specific name.'
-          );
-          countryListEl.innerHTML = '';
-          countryListEl.nextElementSibling.innerHTML = '';
-        } else if (country.length > 2 && country.length <= 10) {
-          countryListEl.nextElementSibling.innerHTML = '';
-          countryListEl.innerHTML = country
-            .map((i) => {
-              return `<div class="country-list_flag"><img src="${i.flags.svg}" alt="" width="32" /><div class="country-list_title">${i.name.common}</div></div>`;
-            })
-            .join('');
-        } else {
-          countryListEl.innerHTML = '';
-          countryListEl.nextElementSibling.innerHTML = `<div class="country-info_flag"><img src="${
-            country[0].flags.svg
-          }" alt="" width="32" /><div class="country-info_title">${
-            country[0].name.common
-          }</div></div><div class="country-info_description"><b>Capital:</b> ${
-            country[0].capital[0]
-          }</div><div class="country-info_description"><b>Population:</b> ${
-            country[0].population
-          }</div><div class="country-info_description"><b>Languages:</b> ${
-            Object.values(country[0].languages)[0]
-          }</div>`;
-        }
-      })
-      .catch((error) => {
-        Notify.failure('Oops, there is no country with that name');
-        countryListEl.innerHTML = '';
-        countryListEl.nextElementSibling.innerHTML = '';
-      });
-  }
+const apiKey =
+  'live_76s8luD6dpYjHegYPdiaCufYa2cJNlNKoeAyGpamV3o5ODaRXJcxDW2QOQMpXcQb';
+
+breedSelect.addEventListener('change', handleChange);
+breedSelect.classList.add('hidden');
+error.classList.add('hidden');
+
+function addList(items) {
+  const markup = items
+    .map(item => {
+      return `<option value=${item.reference_image_id}>${item.name} </option>`;
+    })
+    .join('');
+  breedSelect.innerHTML = markup;
 }
+
+function addPost(item) {
+  const markup = `
+  <img class="breedsImage" src="${item.url}" alt="">
+  <div>
+    <h1>${item.breeds[0].name}</h1>
+    <p>${item.breeds[0].description}</p>
+    <p><b>Temperament: </b>${item.breeds[0].temperament}</p>
+  </div>
+  `;
+  catInfo.innerHTML = markup;
+}
+
+function handleChange(event) {
+  loader.classList.remove('hidden');
+  catInfo.classList.add('hidden');
+  catApi
+    .fetchCatByBreed(event.currentTarget.value)
+    .then(function (response) {
+      addPost(response);
+      loader.classList.add('hidden');
+      catInfo.classList.remove('hidden');
+      error.classList.add('hidden');
+    })
+    .catch(function (error) {
+      Notiflix.Notify.failure(
+        'Upps! Coś poszło nie tak. Odśwież stronę jeszcze raz.'
+      );
+      error.classList.remove('hidden');
+      loader.classList.add('hidden');
+      console.log(error);
+    });
+}
+
+catApi.init(apiKey);
+catApi
+  .fetchBreeds()
+  .then(function (response) {
+    addList(response);
+    loader.classList.add('hidden');
+    breedSelect.classList.remove('hidden');
+    error.classList.add('hidden');
+    const select = new SlimSelect({
+      select: breedSelect,
+    });
+  })
+  .catch(function (error) {
+    Notiflix.Notify.failure(
+      'Oops! Something went wrong! Try reloading the page!'
+    );
+    error.classList.remove('hidden');
+    loader.classList.add('hidden');
+    console.log(error);
+  });
